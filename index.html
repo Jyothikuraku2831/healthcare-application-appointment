@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meridian Health — Appointments & Patient Portal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #FAFAF6;
+    --surface: #FFFFFF;
+    --ink: #1F2E2B;
+    --ink-soft: #55645F;
+    --line: #DEE5DF;
+    --teal: #2F6F5E;
+    --teal-dark: #1F4F42;
+    --teal-tint: #E7F0EC;
+    --slate: #3D5A80;
+    --slate-tint: #E9EEF5;
+    --amber: #B5651D;
+    --amber-tint: #F6E9DD;
+    --radius: 10px;
+  }
+
+  :root:not([data-theme="light"]) {
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', -apple-system, sans-serif;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  h1, h2, h3, .display-serif {
+    font-family: 'Fraunces', Georgia, serif;
+    color: var(--ink);
+  }
+
+  a { color: var(--teal-dark); }
+
+  /* Navbar */
+  .navbar-meridian {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding-top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  }
+  .brand-mark {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--teal);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-right: 10px;
+  }
+  .navbar-meridian .nav-link {
+    color: var(--ink-soft);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.9rem !important;
+  }
+  .navbar-meridian .nav-link:hover,
+  .navbar-meridian .nav-link.active {
+    color: var(--teal-dark);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(180deg, var(--teal-tint) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    max-width: 14ch;
+  }
+  .hero p.lead {
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+  .hero-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+  }
+  .hero-card .slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 0.92rem;
+  }
+  .hero-card .slot:last-child { border-bottom: none; }
+
+  /* Section framing */
+  .section { padding: 4rem 0; border-bottom: 1px solid var(--line); }
+  .section-kicker {
+    color: var(--teal-dark);
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+  .section-title { margin-bottom: 0.5rem; }
+  .section-sub { color: var(--ink-soft); max-width: 60ch; margin-bottom: 2.5rem; }
+
+  /* Panels (replace generic identical-card kit) */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--teal);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+  }
+  .panel + .panel { margin-top: 1.5rem; }
+  .panel h3 {
+    font-size: 1.15rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .form-label { font-weight: 500; font-size: 0.9rem; color: var(--ink); }
+  .form-control, .form-select {
+    border-color: var(--line);
+    padding: 0.55rem 0.75rem;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 0.2rem rgba(47,111,94,0.15);
+  }
+
+  .btn-teal {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+    font-weight: 500;
+    padding: 0.6rem 1.4rem;
+  }
+  .btn-teal:hover { background: var(--teal-dark); border-color: var(--teal-dark); color: #fff; }
+  .btn-outline-reset {
+    border-color: var(--line);
+    color: var(--ink-soft);
+    font-weight: 500;
+    padding: 0.6rem 1.4rem;
+  }
+  .btn-outline-reset:hover { background: var(--bg); color: var(--ink); }
+
+  /* Table */
+  .table-meridian thead {
+    background: var(--teal-tint);
+  }
+  .table-meridian thead th {
+    color: var(--teal-dark);
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: none;
+    border-bottom: none;
+    white-space: nowrap;
+  }
+  .table-meridian td { vertical-align: middle; font-size: 0.92rem; }
+  .table-responsive { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+
+  .status-pill {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+  .status-confirmed { background: var(--teal-tint); color: var(--teal-dark); }
+  .status-pending { background: var(--amber-tint); color: var(--amber); }
+  .status-completed { background: var(--slate-tint); color: var(--slate); }
+
+  /* Health info */
+  .health-detail dt {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.9rem;
+  }
+  .health-detail dd {
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+
+  /* Services */
+  .service-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .service-row:last-child { border-bottom: none; }
+  .service-row .dept { font-family: 'Fraunces', serif; font-size: 1.05rem; }
+  .service-row .doctors { color: var(--ink-soft); font-size: 0.88rem; text-align: right; }
+
+  /* Technologies */
+  .tech-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .tech-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+
+  footer {
+    padding: 2rem 0;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    .section { padding: 2.75rem 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-meridian sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#home">
+      <span class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </span>
+      <span style="font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem;">Meridian Health</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#registration">Patient Registration</a></li>
+        <li class="nav-item"><a class="nav-link" href="#appointments">Appointments</a></li>
+        <li class="nav-item"><a class="nav-link" href="#health-info">Health Information</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#technologies">Technologies</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="home">
+  <div class="container py-5">
+    <div class="row align-items-center gy-4 py-4">
+      <div class="col-lg-6">
+        <h1 class="display-serif">Care coordinated around your time, not the clinic's.</h1>
+        <p class="lead mt-3">Register once, book with the right department, and keep every visit — past and upcoming — in one place.</p>
+        <a href="#registration" class="btn btn-teal mt-2">Book an appointment</a>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span style="font-weight:600; font-size:0.9rem;">Today's schedule</span>
+            <span class="text-muted" style="font-size:0.8rem;">Cardiology · Dr. R. Nair</span>
+          </div>
+          <div class="slot"><span>9:30 AM — A. Fernandes</span><span class="status-pill status-confirmed">Confirmed</span></div>
+          <div class="slot"><span>10:15 AM — J. Sharma</span><span class="status-pill status-pending">Pending</span></div>
+          <div class="slot"><span>11:00 AM — K. Iyer</span><span class="status-pill status-completed">Completed</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PATIENT REGISTRATION -->
+<section class="section" id="registration">
+  <div class="container">
+    <div class="section-kicker">01 — Registration</div>
+    <h2 class="section-title">Patient Registration</h2>
+    <p class="section-sub">Fill in patient and appointment details below. Fields marked required must be completed before submitting.</p>
+
+    <form class="needs-validation" id="registrationForm" novalidate>
+      <div class="panel">
+        <h3>Personal details</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="patientName">Patient Name</label>
+            <input type="text" class="form-control" id="patientName" required>
+            <div class="invalid-feedback">Please enter the patient's name.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" class="form-control" id="email" required>
+            <div class="invalid-feedback">Please enter a valid email address.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="mobile">Mobile Number</label>
+            <input type="tel" class="form-control" id="mobile" pattern="[0-9]{10}" placeholder="10-digit number" required>
+            <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="dob">Date of Birth</label>
+            <input type="date" class="form-control" id="dob" required>
+            <div class="invalid-feedback">Please select a date of birth.</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="gender">Gender</label>
+            <select class="form-select" id="gender" required>
+              <option value="" selected disabled>Choose...</option>
+              <option>Female</option>
+              <option>Male</option>
+              <option>Other</option>
+            </select>
+            <div class="invalid-feedback">Please select a gender.</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="bloodGroup">Blood Group</label>
+            <select class="form-select" id="bloodGroup" required>
+              <option value="" selected disabled>Choose...</option>
+              <option>A+</option><option>A-</option>
+              <option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option>
+              <option>O+</option><option>O-</option>
+            </select>
+            <div class="invalid-feedback">Please select a blood group.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Appointment details</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="department">Department</label>
+            <select class="form-select" id="department" required>
+              <option value="" selected disabled>Choose...</option>
+              <option>Cardiology</option>
+              <option>Dermatology</option>
+              <option>Orthopedics</option>
+              <option>Pediatrics</option>
+              <option>General Medicine</option>
+            </select>
+            <div class="invalid-feedback">Please select a department.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="doctor">Doctor Selection</label>
+            <select class="form-select" id="doctor" required>
+              <option value="" selected disabled>Choose...</option>
+              <option>Dr. R. Nair</option>
+              <option>Dr. S. Menon</option>
+              <option>Dr. A. Verma</option>
+              <option>Dr. P. Reddy</option>
+            </select>
+            <div class="invalid-feedback">Please select a doctor.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="apptDate">Appointment Date</label>
+            <input type="date" class="form-control" id="apptDate" required>
+            <div class="invalid-feedback">Please select an appointment date.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="apptTime">Appointment Time</label>
+            <input type="time" class="form-control" id="apptTime" required>
+            <div class="invalid-feedback">Please select an appointment time.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Address & symptoms</h3>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label" for="address">Address</label>
+            <textarea class="form-control" id="address" rows="2" required></textarea>
+            <div class="invalid-feedback">Please enter an address.</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="symptoms">Symptoms / Health Concern</label>
+            <textarea class="form-control" id="symptoms" rows="2" required></textarea>
+            <div class="invalid-feedback">Please describe the health concern.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-teal">Register</button>
+        <button type="reset" class="btn btn-outline-reset">Reset</button>
+      </div>
+      <div id="formSuccess" class="mt-3" style="display:none; color: var(--teal-dark); font-weight:500;">
+        Registration successful — the appointment has been added below.
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- APPOINTMENTS -->
+<section class="section" id="appointments">
+  <div class="container">
+    <div class="section-kicker">02 — Schedule</div>
+    <h2 class="section-title">Appointments</h2>
+    <p class="section-sub">All booked appointments, most recent first. Select a row's Appointment ID in Health Information to view full details.</p>
+
+    <div class="table-responsive">
+      <table class="table table-meridian mb-0">
+        <thead>
+          <tr>
+            <th>Appointment ID</th>
+            <th>Patient Name</th>
+            <th>Department</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentsBody">
+          <!-- rows injected by script -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- HEALTH INFORMATION -->
+<section class="section" id="health-info">
+  <div class="container">
+    <div class="section-kicker">03 — Record</div>
+    <h2 class="section-title">Health Information</h2>
+    <p class="section-sub">Choose an appointment to view the patient's health summary for that visit.</p>
+
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <label class="form-label" for="healthSelect">Appointment ID</label>
+        <select class="form-select" id="healthSelect"></select>
+      </div>
+      <div class="col-lg-8">
+        <div class="panel mb-0">
+          <dl class="health-detail row mb-0">
+            <div class="col-sm-6"><dt>Patient Name</dt><dd id="hPatient">—</dd></div>
+            <div class="col-sm-6"><dt>Blood Group</dt><dd id="hBlood">—</dd></div>
+            <div class="col-sm-6"><dt>Department</dt><dd id="hDept">—</dd></div>
+            <div class="col-sm-6"><dt>Doctor</dt><dd id="hDoctor">—</dd></div>
+            <div class="col-sm-6"><dt>Appointment Date</dt><dd id="hDate">—</dd></div>
+            <div class="col-sm-6"><dt>Appointment Time</dt><dd id="hTime">—</dd></div>
+            <div class="col-sm-6"><dt>Status</dt><dd id="hStatus">—</dd></div>
+            <div class="col-12"><dt>Symptoms</dt><dd id="hSymptoms">—</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-kicker">04 — Departments</div>
+    <h2 class="section-title">Services</h2>
+    <p class="section-sub">Departments available for booking, with the doctors currently on schedule.</p>
+
+    <div class="panel">
+      <div class="service-row"><span class="dept">Cardiology</span><span class="doctors">Dr. R. Nair</span></div>
+      <div class="service-row"><span class="dept">Dermatology</span><span class="doctors">Dr. S. Menon</span></div>
+      <div class="service-row"><span class="dept">Orthopedics</span><span class="doctors">Dr. A. Verma</span></div>
+      <div class="service-row"><span class="dept">Pediatrics</span><span class="doctors">Dr. P. Reddy</span></div>
+      <div class="service-row"><span class="dept">General Medicine</span><span class="doctors">Dr. R. Nair, Dr. P. Reddy</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGIES -->
+<section class="section" id="technologies" style="border-bottom:none;">
+  <div class="container">
+    <div class="section-kicker">05 — Built with</div>
+    <h2 class="section-title">Technologies</h2>
+    <p class="section-sub">This portal is built entirely with:</p>
+    <div class="d-flex flex-wrap gap-2">
+      <span class="tech-chip"><span class="tech-dot"></span>HTML5</span>
+      <span class="tech-chip"><span class="tech-dot"></span>CSS3</span>
+      <span class="tech-chip"><span class="tech-dot"></span>Bootstrap 5</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Meridian Health — Patient Portal · Front-end demo project
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ---- Seed appointment data ----
+  let appointments = [
+    { id: "APT-1001", name: "A. Fernandes", dept: "Cardiology", doctor: "Dr. R. Nair", date: "2026-09-25", time: "09:30", status: "Confirmed", blood: "O+", symptoms: "Occasional chest tightness during exercise." },
+    { id: "APT-1002", name: "J. Sharma", dept: "Dermatology", doctor: "Dr. S. Menon", date: "2026-09-25", time: "10:15", status: "Pending", blood: "B+", symptoms: "Persistent skin rash on forearm." },
+    { id: "APT-1003", name: "K. Iyer", dept: "Orthopedics", doctor: "Dr. A. Verma", date: "2026-09-24", time: "11:00", status: "Completed", blood: "A-", symptoms: "Knee pain after a fall." }
+  ];
+  let counter = 1004;
+
+  function statusClass(status) {
+    if (status === "Confirmed") return "status-confirmed";
+    if (status === "Pending") return "status-pending";
+    return "status-completed";
+  }
+
+  function renderAppointments() {
+    const body = document.getElementById("appointmentsBody");
+    body.innerHTML = "";
+    appointments.forEach(a => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${a.id}</td>
+        <td>${a.name}</td>
+        <td>${a.dept}</td>
+        <td>${a.doctor}</td>
+        <td>${a.date}</td>
+        <td>${a.time}</td>
+        <td><span class="status-pill ${statusClass(a.status)}">${a.status}</span></td>
+      `;
+      body.appendChild(tr);
+    });
+    renderHealthSelect();
+  }
+
+  function renderHealthSelect() {
+    const select = document.getElementById("healthSelect");
+    const current = select.value;
+    select.innerHTML = "";
+    appointments.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a.id;
+      opt.textContent = `${a.id} — ${a.name}`;
+      select.appendChild(opt);
+    });
+    if (current && appointments.some(a => a.id === current)) {
+      select.value = current;
+    }
+    showHealthInfo(select.value);
+  }
+
+  function showHealthInfo(id) {
+    const a = appointments.find(x => x.id === id);
+    if (!a) return;
+    document.getElementById("hPatient").textContent = a.name;
+    document.getElementById("hBlood").textContent = a.blood;
+    document.getElementById("hDept").textContent = a.dept;
+    document.getElementById("hDoctor").textContent = a.doctor;
+    document.getElementById("hDate").textContent = a.date;
+    document.getElementById("hTime").textContent = a.time;
+    document.getElementById("hStatus").textContent = a.status;
+    document.getElementById("hSymptoms").textContent = a.symptoms;
+  }
+
+  document.getElementById("healthSelect").addEventListener("change", (e) => {
+    showHealthInfo(e.target.value);
+  });
+
+  // ---- Registration form ----
+  const form = document.getElementById("registrationForm");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+      return;
+    }
+
+    const newAppt = {
+      id: "APT-" + counter++,
+      name: document.getElementById("patientName").value,
+      dept: document.getElementById("department").value,
+      doctor: document.getElementById("doctor").value,
+      date: document.getElementById("apptDate").value,
+      time: document.getElementById("apptTime").value,
+      status: "Pending",
+      blood: document.getElementById("bloodGroup").value,
+      symptoms: document.getElementById("symptoms").value
+    };
+    appointments.unshift(newAppt);
+    renderAppointments();
+
+    document.getElementById("formSuccess").style.display = "block";
+    form.reset();
+    form.classList.remove("was-validated");
+    setTimeout(() => { document.getElementById("formSuccess").style.display = "none"; }, 4000);
+  });
+
+  form.addEventListener("reset", function () {
+    form.classList.remove("was-validated");
+  });
+
+  renderAppointments();
+</script>
+
+</body>
+</html>
